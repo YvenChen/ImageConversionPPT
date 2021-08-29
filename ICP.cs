@@ -48,7 +48,15 @@ namespace ImageConversionPPT
         /// </summary>
         private static void ConversionPPT()
         {
-            System.IO.Compression.ZipFile.CreateFromDirectory(ImagePath, ImagePath + ".pptx");
+            string suffix = "";
+            int suffixNum = 1;
+
+            while (File.Exists(ImagePath + suffix + ".pptx")) {
+                suffixNum += 1;
+                suffix = "(" + suffixNum + ")";
+            }
+
+            System.IO.Compression.ZipFile.CreateFromDirectory(ImagePath, ImagePath + suffix + ".pptx");
             DirectoryInfo directory = new(ImagePath);
             directory.Delete(true);
         }
@@ -102,7 +110,7 @@ namespace ImageConversionPPT
             {
                 modNode.AppendChild((XmlElement)modNode.LastChild.CloneNode(true));
             }
-            
+
             xmlDoc.Save(ImagePath + @"\docProps\app.xml");
         }
 
